@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Address App</title>
+    <link rel="stylesheet" href = "style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Baloo+Bhaina+2&family=Caveat&family=Poppins&family=Roboto&display=swap" rel="stylesheet">
+</head>
+<body>
+    
+ <div class = "card" >
+    <div class = "search">
+        <input type = "text" placeholder="Enter Zip Code" spellcheck="false">
+        <button><img src = "images/search.png"></button>
+    </div>
+    <div class = "err">
+        <p>Try Some Other ZipCode</p>
+     </div>
+    <div class = "Address">
+        <img src = "images/Map.png" class="Map-icon">
+        <h2 class = "city">City</h2>
+        <div class = "details">
+            <div class = "col">
+                <img src = "images/time-zone.jpg">
+                <div>
+                    <p class = "Timezone">Time Zone</p>
+                </div>
+            </div>
+            <div class = "col">
+                <img src = "images/Currency.png">
+                <div>
+                    <p class = "Currency">Currency</p>
+                </div>
+            </div>
+        </div>
+    </div>
+ </div>
+ <script>
+ const apikey = "3d6ab08525d042d5b895f16c7f09a6f8";
+ const apiUrl = "https://api.opencagedata.com/geocode/v1/json?q="
+ var searchinput = document.querySelector(".search input");
+ var searchbtn = document.querySelector(".search button");
+
+
+ async function checkWeather(pin){
+    const response = await fetch(apiUrl+pin+`&key=${apikey}`);
+    var data = await response.json();
+    if(data.status.code == 200 && data.results.length>0){ 
+    document.querySelector(".err").style.display = "none";   
+    document.querySelector(".Address").style.display = "block";   
+    document.querySelector(".city").innerHTML = data.results[0].formatted;
+    document.querySelector(".Timezone").innerHTML = data.timestamp.created_http;
+    document.querySelector(".Currency").innerHTML = data.results[0].annotations.currency.name;
+    }
+    else{
+        document.querySelector(".Address").style.display = "none";
+        document.querySelector(".err").style.display = "block";
+    } 
+
+ }
+    searchbtn.addEventListener("click", ()=>{
+        checkWeather(searchinput.value);
+   });
+
+ </script>
+</body>
+</html>
